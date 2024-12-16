@@ -6,7 +6,7 @@ function App() {
   return (
     <>
       <div className='text-green-800'>
-        hello world
+       this is netflix fpt
         </div>
     </>
   )
