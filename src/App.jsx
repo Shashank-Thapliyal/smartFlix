@@ -1,14 +1,24 @@
-import { useState } from 'react'
+import React from 'react'
+import Body from './Components/Body'
+import { createBrowserRouter, RouterProvider } from 'react-router-dom'
+import Browse from './Components/Browse'
 
+const App = () => {
+  const appRouter = createBrowserRouter([
+    {
+      path : "/",
+      element : <Body />
+    },
+    {
+      path : "/browse",
+      element : <Browse/>
+    }
+  ])
 
-function App() {
- 
   return (
-    <>
-      <div className='text-green-800'>
-       this is netflix fpt
-        </div>
-    </>
+    <div>
+      <RouterProvider router={appRouter} />
+    </div>
   )
 }
 
