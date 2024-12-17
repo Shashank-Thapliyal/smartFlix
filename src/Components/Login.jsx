@@ -1,13 +1,61 @@
-import React, { useState } from 'react';
+import React, { useRef, useState } from 'react';
 import Header from './Header';
+import { validateAuth } from '../utils/validateForm';
+import { auth } from '../utils/firebase';
+import { createUserWithEmailAndPassword, signInWithEmailAndPassword } from 'firebase/auth';
 
 const Login = () => {
     const [isLogin, setIsLogin] = useState(true);
+    const [errMessage, setErrMessage] = useState("");
+
+    const name = useRef(null)
+    const email = useRef(null)
+    const password = useRef(null)
 
     const toggleLogin = (e) => {
         e.preventDefault();
         setIsLogin(!isLogin);
     }
+
+    const handleLoginClick = () =>{
+        const {valid,message} = validateAuth(email.current.value, password.current.value)
+        if(!valid){
+            setErrMessage(message)
+            return ;
+        } 
+        if(!isLogin){
+            //registratin logic
+            createUserWithEmailAndPassword(auth, email.current.value, password.current.value)
+                .then((userCredential) => {
+                    // Signed in 
+                const user = userCredential.user;
+                console.log(user)
+            })
+            .catch((error) => {
+                const errorCode = error.code;
+                const errorMessage = error.message;
+                console.log(errorCode, errorMessage)
+            });
+
+
+        }else{
+            //login handleLoginClick
+                signInWithEmailAndPassword(auth, email.current.value, password.current.value)
+                .then((userCredential) => {
+                    // Signed in 
+                    const user = userCredential.user;
+                    console.log(user);
+                    // ...
+                })
+                .catch((error) => {
+                    const errorCode = error.code;
+                    const errorMessage = error.message;
+                    setErrMessage("User Not Found")
+                });
+
+        }
+    }
+
 
     return (
         <div className='relative'>
@@ -24,24 +72,36 @@ const Login = () => {
                 <h2 className='text-white text-4xl p-4 m-2 font-bold'>Sign In</h2>
                 <div className='flex flex-col p-2 m-4 '>
                     {
-                        !isLogin && <input className='p-3 rounded-sm m-2 opacity-80 bg-gray-600 text-white'
+                        !isLogin && <input 
+                            ref={name}
+                            className='p-3 rounded-sm m-2 opacity-80 bg-gray-600 text-white'
                             type='text'
-                            placeholder='Full Name' />
+                            placeholder='Full Name'
+                            />
                     }
                     <input
+                        ref={email}
                         className='p-3 rounded-sm m-2 opacity-80 bg-gray-600 text-white'
                         type='email'
                         placeholder='Email Address'
+                        
                     />
                     <input
+                        ref={password}
                         className='p-3 opacity-80 rounded-sm m-2 bg-gray-600 text-white'
                         type='password'
-                        placeholder='Password'
+                        placeholder='Password' 
                     />
-                    <button onClick={(e)=>{e.preventDefault()}} className='p-3 h-12 rounded-md m-2 text-lg cursor-pointer font-semibold bg-red-800 opacity-100'>
-                        {isLogin ? "Sign In" : "Register"}
-                    </button>
-
+                    <p className='text-red-700 m-3'>{errMessage}</p>
+                    <button onClick={(e)=>{
+                            e.preventDefault()
+                            handleLoginClick();
+                        }} className='p-3 h-12 rounded-md m-2 text-lg cursor-pointer font-semibold bg-red-800 opacity-100'
+                            
+                        >
+                        {isLogin?  "Sign In" : "Register"} 
+                        </button> 
+                    
                     <p className='text-center'>OR </p>
 
                     <button className='p-3 cursor-pointer h-12 bg-opacity-80 rounded-md m-2 text-lg bg-gray-500 '>
