@@ -2,14 +2,17 @@ import React, { useRef, useState } from 'react';
 import Header from './Header';
 import { validateAuth } from '../utils/validateForm';
 import { auth } from '../utils/firebase';
-import { createUserWithEmailAndPassword, signInWithEmailAndPassword } from 'firebase/auth';
+import { createUserWithEmailAndPassword, signInWithEmailAndPassword, updateProfile } from 'firebase/auth';
 import { useNavigate } from 'react-router-dom';
+import { useDispatch } from 'react-redux';
+import { addUser } from '../utils/userSlice';
 
 const Login = () => {
     const [isLoginPage, setisLoginPage] = useState(true);
     const [errMessage, setErrMessage] = useState("");
 
     const navigate = useNavigate(); //routing 
+    const dispatch = useDispatch();
 
     const name = useRef(null)
     const email = useRef(null)
@@ -20,41 +23,46 @@ const Login = () => {
         setisLoginPage(!isLoginPage);
     }
 
-    const handleLoginClick = () =>{
-        const {valid,message} = validateAuth(email.current.value, password.current.value)
-        if(!valid){
+    const handleLoginClick = () => {
+        const { valid, message } = validateAuth(email.current.value, password.current.value)
+        if (!valid) {
             setErrMessage(message)
-            return ;
-        } 
-        if(!isLoginPage){
+            return;
+        }
+        if (!isLoginPage) {
             //registratin logic
             createUserWithEmailAndPassword(auth, email.current.value, password.current.value)
                 .then((userCredential) => {
-                    // Signed in 
-                const user = userCredential.user;
-                console.log(user)
-            })
-            .catch((error) => {
-                const errorCode = error.code;
-                const errorMessage = error.message;
-                setErrMessage("Email already Exists")
-            });
+                    const user = userCredential.user;
+                    updateProfile(user, {
+                        displayName: name.current.value,
+                        photoURL: "",
+                    }).then(() => {
+                        const { uid, email, displayName } = user;
+                        dispatch(addUser({ uid, email, displayName }));
+                    }).catch((error) => {
+                        setErrMessage(error.message);
+                    });
+                    navigate("/browse");
+                })
+                .catch((error) => {
+                   error? setErrMessage("Email already exists") : setErrMessage("")
+                });
 
 
-        }else{
+
+        } else {
             //login handleLoginClick
-                signInWithEmailAndPassword(auth, email.current.value, password.current.value)
+            signInWithEmailAndPassword(auth, email.current.value, password.current.value)
                 .then((userCredential) => {
                     // Signed in 
                     const user = userCredential.user;
-                    console.log(user);
                     navigate("/browse")
                     // ...
                 })
                 .catch((error) => {
                     const errorCode = error.code;
                     const errorMessage = error.message;
-                    console.log(errorMessage)
                     setErrMessage("User Not Found")
                 });
 
@@ -77,36 +85,36 @@ const Login = () => {
                 <h2 className='text-white text-4xl p-4 m-2 font-bold'>Sign In</h2>
                 <div className='flex flex-col p-2 m-4 '>
                     {
-                        !isLoginPage && <input 
+                        !isLoginPage && <input
                             ref={name}
                             className='p-3 rounded-sm m-2 opacity-80 bg-gray-600 text-white'
                             type='text'
                             placeholder='Full Name'
-                            />
+                        />
                     }
                     <input
                         ref={email}
                         className='p-3 rounded-sm m-2 opacity-80 bg-gray-600 text-white'
                         type='email'
                         placeholder='Email Address'
-                        
+
                     />
                     <input
                         ref={password}
                         className='p-3 opacity-80 rounded-sm m-2 bg-gray-600 text-white'
                         type='password'
-                        placeholder='Password' 
+                        placeholder='Password'
                     />
                     <p className='text-red-700 m-3'>{errMessage}</p>
-                    <button onClick={(e)=>{
-                            e.preventDefault()
-                            handleLoginClick();
-                        }} className='p-3 h-12 rounded-md m-2 text-lg cursor-pointer font-semibold bg-red-800 opacity-100'
-                            
-                        >
-                        {isLoginPage?  "Sign In" : "Register"} 
-                        </button> 
-                    
+                    <button onClick={(e) => {
+                        e.preventDefault()
+                        handleLoginClick();
+                    }} className='p-3 h-12 rounded-md m-2 text-lg cursor-pointer font-semibold bg-red-800 opacity-100'
+
+                    >
+                        {isLoginPage ? "Sign In" : "Register"}
+                    </button>
+
                     <p className='text-center'>OR </p>
 
                     <button className='p-3 cursor-pointer h-12 bg-opacity-80 rounded-md m-2 text-lg bg-gray-500 '>

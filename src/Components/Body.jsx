@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react'
-import { createBrowserRouter, RouterProvider } from 'react-router-dom'
+import { createBrowserRouter, RouterProvider, useNavigate } from 'react-router-dom'
 import { auth } from '../utils/firebase'
 import { onAuthStateChanged } from 'firebase/auth'
 import Browse from './Browse'
@@ -9,6 +9,7 @@ import { addUser, removeUser } from '../utils/userSlice'
 
 const Body = () => {
   const dispatch = useDispatch(); //redux store dispatch action
+
   
   const appRouter = createBrowserRouter([
     {
@@ -34,6 +35,7 @@ const Body = () => {
       } else {
         // User is signed out
         dispatch(removeUser())
+        // navigate("/") can't use here.... Uncaught Error: useNavigate() may be used only in the context of a <Router> component.
         }
     });
     
