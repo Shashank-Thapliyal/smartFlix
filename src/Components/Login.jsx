@@ -3,10 +3,13 @@ import Header from './Header';
 import { validateAuth } from '../utils/validateForm';
 import { auth } from '../utils/firebase';
 import { createUserWithEmailAndPassword, signInWithEmailAndPassword } from 'firebase/auth';
+import { useNavigate } from 'react-router-dom';
 
 const Login = () => {
-    const [isLogin, setIsLogin] = useState(true);
+    const [isLoginPage, setisLoginPage] = useState(true);
     const [errMessage, setErrMessage] = useState("");
+
+    const navigate = useNavigate(); //routing 
 
     const name = useRef(null)
     const email = useRef(null)
@@ -14,7 +17,7 @@ const Login = () => {
 
     const toggleLogin = (e) => {
         e.preventDefault();
-        setIsLogin(!isLogin);
+        setisLoginPage(!isLoginPage);
     }
 
     const handleLoginClick = () =>{
@@ -23,7 +26,7 @@ const Login = () => {
             setErrMessage(message)
             return ;
         } 
-        if(!isLogin){
+        if(!isLoginPage){
             //registratin logic
             createUserWithEmailAndPassword(auth, email.current.value, password.current.value)
                 .then((userCredential) => {
@@ -34,7 +37,7 @@ const Login = () => {
             .catch((error) => {
                 const errorCode = error.code;
                 const errorMessage = error.message;
-                console.log(errorCode, errorMessage)
+                setErrMessage("Email already Exists")
             });
 
 
@@ -45,11 +48,13 @@ const Login = () => {
                     // Signed in 
                     const user = userCredential.user;
                     console.log(user);
+                    navigate("/browse")
                     // ...
                 })
                 .catch((error) => {
                     const errorCode = error.code;
                     const errorMessage = error.message;
+                    console.log(errorMessage)
                     setErrMessage("User Not Found")
                 });
 
@@ -72,7 +77,7 @@ const Login = () => {
                 <h2 className='text-white text-4xl p-4 m-2 font-bold'>Sign In</h2>
                 <div className='flex flex-col p-2 m-4 '>
                     {
-                        !isLogin && <input 
+                        !isLoginPage && <input 
                             ref={name}
                             className='p-3 rounded-sm m-2 opacity-80 bg-gray-600 text-white'
                             type='text'
@@ -99,7 +104,7 @@ const Login = () => {
                         }} className='p-3 h-12 rounded-md m-2 text-lg cursor-pointer font-semibold bg-red-800 opacity-100'
                             
                         >
-                        {isLogin?  "Sign In" : "Register"} 
+                        {isLoginPage?  "Sign In" : "Register"} 
                         </button> 
                     
                     <p className='text-center'>OR </p>
@@ -112,7 +117,7 @@ const Login = () => {
                     <p>Forgot password?</p>
                 </div>
 
-                {isLogin ?
+                {isLoginPage ?
                     <p className='p-2 mx-4 my-4 text-gray-400 '>New to Netflix? <button className='text-white font-bold' onClick={toggleLogin}>  Sign up Now !</button></p>
                     :
                     <p className='p-2 mx-4 my-4 text-gray-400 '>Already a user? <button className='text-white cursor-pointer font-bold' onClick={toggleLogin}>  Sign In Now !</button></p>
