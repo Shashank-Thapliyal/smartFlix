@@ -6,6 +6,7 @@ import { createUserWithEmailAndPassword, signInWithEmailAndPassword, updateProfi
 import { useNavigate } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
 import { addUser } from '../utils/userSlice';
+import { BANNER_IMG } from '../utils/constants';
 
 const Login = () => {
     const [isLoginPage, setisLoginPage] = useState(true);
@@ -76,7 +77,7 @@ const Login = () => {
             <div>
                 <img
                     className='bg-black bg-blend-color-burn absolute bg-gradient-to-b from-black to-gray-50'
-                    src='https://assets.nflxext.com/ffe/siteui/vlv3/729ce5c2-d831-436a-8c9d-f38fea0b99b3/web/IN-en-20241209-TRIFECTA-perspective_4aef76eb-7d5b-4be0-93c0-5f67320fd878_large.jpg'
+                    src={BANNER_IMG}
                     alt='bg'
                 />
             </div>
