@@ -2,16 +2,16 @@ import React from 'react'
 import { YOUTUBE_URL } from '../utils/constants'
 import useMainMovieVideo from '../hooks/useMainMovieVideo'
 
-const VideoBackground = ({ movieId }) => {
+const VideoBackground = ({ movieId,playing }) => {
   const videoData = useMainMovieVideo(movieId);
-  console.log("videoData in component", videoData);
 
+  const isPlaying  = playing? `1`:`0`; 
   if (!videoData) return null;
 
   const {key} = videoData.results.find(video => video?.type === "Trailer") || videoData.results[0];
 
 
-  const videoSrc = `${YOUTUBE_URL}${key}?autoplay=1&controls=0&mute=1&loop=1}`;
+  const videoSrc = `${YOUTUBE_URL}${key}?autoplay=${isPlaying}&controls=0&mute=1&loop=1}`;
 
   return (
     <div>

@@ -24,7 +24,6 @@ const useMainMovieVideo = (movieId) => {
     getMainMovieVideo();
   }, 
   []);
-  console.log("videoData", videoData);
   return videoData;
 };
 
