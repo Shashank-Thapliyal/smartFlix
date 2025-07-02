@@ -12,7 +12,7 @@ const Login = () => {
     const [isLoginPage, setisLoginPage] = useState(true);
     const [errMessage, setErrMessage] = useState("");
 
-    const navigate = useNavigate(); //routing 
+    const navigate = useNavigate(); 
     const dispatch = useDispatch();
 
     const name = useRef(null)
@@ -59,12 +59,11 @@ const Login = () => {
                     // Signed in 
                     const user = userCredential.user;
                     navigate("/browse")
-                    // ...
                 })
                 .catch((error) => {
                     const errorCode = error.code;
                     const errorMessage = error.message;
-                    setErrMessage("User Not Found")
+                    setErrMessage("User Not Found", errorCode, errorMessage)
                 });
 
         }

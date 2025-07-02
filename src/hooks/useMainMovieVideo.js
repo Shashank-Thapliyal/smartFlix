@@ -1,4 +1,4 @@
-// Desc: Custom hook to fetch the main movie video
+// Desc: Custom hook to fetch the main movie 
 
 import { useEffect, useState } from "react";
 

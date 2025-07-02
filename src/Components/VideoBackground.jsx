@@ -8,8 +8,7 @@ const VideoBackground = ({ movieId,playing }) => {
   const isPlaying  = playing? `1`:`0`; 
   if (!videoData) return null;
 
-  const {key} = videoData.results.find(video => video?.type === "Trailer") || videoData.results[0];
-
+  const {key} = videoData.results.find(video => video?.type === "Clip");
 
   const videoSrc = `${YOUTUBE_URL}${key}?autoplay=${isPlaying}&controls=0&mute=1&loop=1}`;
 

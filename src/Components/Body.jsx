@@ -6,10 +6,10 @@ import Browse from './Browse'
 import Login from './Login'
 import { useDispatch } from 'react-redux'
 import { addUser, removeUser } from '../utils/userSlice'
+import SearchBox from './SearchBox'
 
 const Body = () => {
-  const dispatch = useDispatch(); //redux store dispatch action
-
+  const dispatch = useDispatch();
   
   const appRouter = createBrowserRouter([
     {
@@ -19,7 +19,12 @@ const Body = () => {
     {
       path : "/browse",
       element : <Browse/>
+    },
+    {
+      path: "/search",
+      element : <SearchBox />
     }
+    
   ])
 
 
