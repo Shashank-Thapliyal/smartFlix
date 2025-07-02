@@ -13,7 +13,7 @@ const SearchBox = () => {
   const [showResults, setShowResults] = useState(false);
   
   const handleSubmit = async () => {
-    console.log("Search initiated");
+    // console.log("Search initiated");
     setLoading(true);
     setError(null);
     setMovies([]);

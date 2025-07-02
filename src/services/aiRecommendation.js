@@ -40,11 +40,11 @@ export async function getMovieRecommendations(userQuery) {
       const movieTitles = JSON.parse(cleanedText);
       return movieTitles;
     } catch (err) {
-      console.error("Error parsing the response:", err);
+      // console.error("Error parsing the response:", err);
       // return extractMovieTitlesFromText(generatedText);
     }
   } catch (error) {
-    console.error("Error calling Gemini API:", error);
+    // console.error("Error calling Gemini API:", error);
     throw error;
   }
 }
@@ -85,7 +85,7 @@ const getApiOptions = () => {
   try {
     return JSON.parse(import.meta.env.VITE_API_OPTIONS);
   } catch (error) {
-    console.error("Error parsing VITE_API_OPTIONS:", error);
+    // console.error("Error parsing VITE_API_OPTIONS:", error);
     return {
       method: "GET",
       headers: {
@@ -117,7 +117,7 @@ export async function searchMovie(title) {
     // Return the first result if found, null otherwise
     return data.results && data.results.length > 0 ? data.results[0] : null;
   } catch (error) {
-    console.error(`Error searching for movie "${title}":`, error);
+    // console.error(`Error searching for movie "${title}":`, error);
     return null;
   }
 }
@@ -140,7 +140,7 @@ export async function getMovieDetails(movieId) {
     const data = await response.json();
     return data;
   } catch (error) {
-    console.error(`Error getting movie details for ID ${movieId}:`, error);
+    // console.error(`Error getting movie details for ID ${movieId}:`, error);
     return null;
   }
 }

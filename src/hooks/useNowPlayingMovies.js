@@ -20,7 +20,7 @@ const dispatch = useDispatch();
       dispatch(addNowPlayingMovies(data.results));
     }
     catch (err) {
-      console.log(err)
+      // console.log(err)
     }
   }
 

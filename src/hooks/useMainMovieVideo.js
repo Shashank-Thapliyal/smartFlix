@@ -6,7 +6,7 @@ const useMainMovieVideo = (movieId) => {
   const [videoData, setVideoData] = useState(null);
   const getMainMovieVideo = async () => {
     try {
-      console.log(`Bearer ${import.meta.env.VITE_TMDB_ACCESS_TOKEN}`)
+      // console.log(`Bearer ${import.meta.env.VITE_TMDB_ACCESS_TOKEN}`)
       const apiOptions = {
         method: "GET",
         headers: {
@@ -23,7 +23,7 @@ const useMainMovieVideo = (movieId) => {
       const data = await response.json();
       setVideoData(data);
     } catch (error) {
-      console.log(error);
+      // console.log(error);
     }
   };
 
