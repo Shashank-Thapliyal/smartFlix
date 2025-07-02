@@ -114,19 +114,13 @@ const Login = () => {
                     >
                         {isLoginPage ? "Sign In" : "Register"}
                     </button>
-
-                    <p className='text-center'>OR </p>
-
-                    <button className='p-3 cursor-pointer h-12 bg-opacity-80 rounded-md m-2 text-lg bg-gray-500 '>
-                        Use a sign-in Code
-                    </button>
                 </div>
                 <div className=' text-center p-2 mx-4 my-2'>
                     <p>Forgot password?</p>
                 </div>
 
                 {isLoginPage ?
-                    <p className='p-2 mx-4 my-4 text-gray-400 '>New to Netflix? <button className='text-white font-bold' onClick={toggleLogin}>  Sign up Now !</button></p>
+                    <p className='p-2 mx-4 my-4 text-gray-400 '>New Here ? <button className='text-white font-bold' onClick={toggleLogin}>  Sign up Now !</button></p>
                     :
                     <p className='p-2 mx-4 my-4 text-gray-400 '>Already a user? <button className='text-white cursor-pointer font-bold' onClick={toggleLogin}>  Sign In Now !</button></p>
                 }
