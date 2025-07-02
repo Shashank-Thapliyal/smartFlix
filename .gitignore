@@ -31,9 +31,6 @@ dist/
 hosting.ZG.cache
 .firebase/
 
-# Firebase config (add manually if sensitive)
-firebase.json
-.firebaserc
 
 # Logs
 npm-debug.log
