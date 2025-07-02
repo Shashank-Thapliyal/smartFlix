@@ -1,8 +1,8 @@
-import React, { useEffect } from 'react'
-import { useDispatch, useSelector } from 'react-redux'
+import React, { useEffect } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import { onAuthStateChanged, signOut } from "firebase/auth";
 import { auth } from '../utils/firebase';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
 import { addUser, removeUser } from '../utils/userSlice';
 import LOGO_URL from "../assets/SMARTFLIX-LOGO.png";
 import { PermIdentity } from '@mui/icons-material';
@@ -10,10 +10,10 @@ import { toggleSearch } from '../utils/searchSlice';
 import { SUPPORTED_LANGUAGES } from '../utils/constants';
 import { changeLanguage } from '../utils/languageSlice';
 
-
 const Header = () => {
   const user = useSelector(store => store.user);
   const navigate = useNavigate();
+  const location = useLocation();
   const dispatch = useDispatch();
   const isSearchVisible = useSelector(store => store.search?.showSearch);
 
@@ -23,26 +23,34 @@ const Header = () => {
         const { uid, email, displayName } = user;
         dispatch(addUser({ uid, email, displayName }));
         if (window.location.pathname === '/') {
-          navigate("/browse")
+          navigate("/browse");
         }
       } else {
-        dispatch(removeUser())
+        dispatch(removeUser());
         if (window.location.pathname !== '/') {
-          navigate("/")
+          navigate("/");
         }
       }
     });
 
-    return () => unsubscribe()
+    return () => unsubscribe();
   }, []);
 
-  const handleSignOUt = () => {
+  useEffect(() => {
+    // Update the search visibility based on the current path
+    if (location.pathname === '/search' && !isSearchVisible) {
+      dispatch(toggleSearch());
+    } else if (location.pathname === '/browse' && isSearchVisible) {
+      dispatch(toggleSearch());
+    }
+  }, [location.pathname, isSearchVisible, dispatch]);
+
+  const handleSignOut = () => {
     signOut(auth).then(() => {
     }).catch((error) => {
-      navigate("/error")
-      console.log(error)
+      // console.log(error);
     });
-  }
+  };
 
   const handleSearchClick = () => {
     if (!isSearchVisible) {
@@ -54,9 +62,8 @@ const Header = () => {
   };
 
   const handleLanguageChange = (e) => {
-    // console.log(e.target.value)
-    dispatch(changeLanguage(e.target.value))
-  }
+    dispatch(changeLanguage(e.target.value));
+  };
 
   return (
     <div className='fixed top-0 left-0 right-0 z-50 bg-gradient-to-b from-black/90 via-black/50 to-transparent'>
@@ -101,7 +108,7 @@ const Header = () => {
               <PermIdentity className='text-white w-6 h-6 mr-2' />
               <button
                 className='text-white text-sm font-medium hover:text-gray-300 transition-colors'
-                onClick={handleSignOUt}
+                onClick={handleSignOut}
               >
                 Sign Out
               </button>
@@ -110,7 +117,7 @@ const Header = () => {
         </div>
       </div>
     </div>
-  )
-}
+  );
+};
 
-export default Header
+export default Header;
