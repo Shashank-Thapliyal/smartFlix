@@ -1,29 +1,34 @@
-// Desc: Custom hook to fetch the main movie 
+// Desc: Custom hook to fetch the main movie
 
 import { useEffect, useState } from "react";
 
 const useMainMovieVideo = (movieId) => {
-    const [videoData, setVideoData] = useState(null);
+  const [videoData, setVideoData] = useState(null);
   const getMainMovieVideo = async () => {
     try {
+      const apiOptions = {
+        method: "GET",
+        headers: {
+          accept: "application/json",
+          Authorization: `Bearer ${import.meta.env.VITE_TMDB_ACCESS_TOKEN}`,
+        },
+      };
       const response = await fetch(
         import.meta.env.VITE_MAIN_MOVIE_URL +
           movieId +
           "/videos?language=en-US",
-        JSON.parse(import.meta.env.VITE_API_OPTIONS)
+        apiOptions
       );
       const data = await response.json();
       setVideoData(data);
-
     } catch (error) {
       console.log(error);
     }
   };
 
-  useEffect( ()=>{
+  useEffect(() => {
     getMainMovieVideo();
-  }, 
-  []);
+  }, []);
   return videoData;
 };
 

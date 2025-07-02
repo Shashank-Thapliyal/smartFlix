@@ -8,7 +8,14 @@ const dispatch = useDispatch();
 
   const getMovies = async () => {
     try {
-      const response = await fetch(import.meta.env.VITE_API_URL, JSON.parse(import.meta.env.VITE_API_OPTIONS));
+      const apiOptions = {
+        method: "GET",
+        headers: {
+          accept: "application/json",
+          Authorization: `Bearer ${import.meta.env.VITE_TMDB_ACCESS_TOKEN}`,
+        },
+      };
+      const response = await fetch(import.meta.env.VITE_API_URL, apiOptions);
       const data = await response.json();
       dispatch(addNowPlayingMovies(data.results));
     }
